@@ -8,16 +8,17 @@ void onKeyboardPress(unsigned char characterPressed, int x, int y);
 
 void onMouseEvent(int button, int state, int x, int y);
 
+void drawAxes();
+
 int main(int argc, char **argv) {
     glutInit(&argc, argv);
     // GLUT_DOUBLE means double buffer
     // the front buffer is the buffer shown on the screen, the back buffer is the buffer on which we draw
     // when we want to display the back buffer, we can just swap the two via glutSwapBuffers()
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
-    // TODO
-    glutInitWindowPosition(100, 100);
-    // TODO
-    glutInitWindowSize(640, 480);
+    glutInitWindowPosition(0, 0);
+    // if your screen isn't this resolution you should modify these
+    glutInitWindowSize(1920, 1080);
     glutCreateWindow("Trigonometric Functions");
 
     // set the default background color (when color buffer is cleared)
@@ -43,9 +44,7 @@ void render(void) {
     // resets all the transformations of the current matrix
     glLoadIdentity();
 
-    // TODO
-    // handle rendering here
-    // first call function to draw the frame
+    drawAxes();
     // then by if statements, call to either of 3 functions depending on which animation is active
 
     // swap the back buffer with the front buffer to display what we just drew
@@ -75,7 +74,7 @@ void reshape(int windowWidth, int windowHeight) {
     // |     |      |
     // --------------
     // farthest left,    right,      bottom,     top
-    gluOrtho2D(-200.0, 200.0, -200.0, 200.0);
+    gluOrtho2D(0, 1920, 0, 1080);
     // we are done modifying the projection matrix, go back to model view matrix
     glMatrixMode(GL_MODELVIEW);
 }
@@ -89,4 +88,29 @@ void onKeyboardPress(unsigned char characterPressed, int x, int y) {
 void onMouseEvent(int button, int state, int x, int y) {
     if (button == GLUT_RIGHT_BUTTON)
         exit(0);
+}
+
+void drawAxes() {
+    glBegin(GL_LINES);
+        // X-AXIS
+        glVertex2f(100, 440);
+        glVertex2f(1820, 440);
+            // draw > at the end of X-axis
+            // bottom line
+            glVertex2f(1820, 460);
+            glVertex2f(1840, 440);
+            // top line
+            glVertex2f(1820, 420);
+            glVertex2f(1840, 440);
+        // Y-AXIS
+        glVertex2f(960, 100);
+        glVertex2f(960, 780);
+            // draw ^ at the top of Y-axis
+            // left line
+            glVertex2f(940, 780);
+            glVertex2f(960, 800);
+            // right line
+            glVertex2f(980, 780);
+            glVertex2f(960, 800);
+    glEnd();
 }
