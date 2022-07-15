@@ -1,17 +1,20 @@
 #include <GL/glut.h>
-#include "constants.h"
+#include "functions.h"
+
+bool g_PAUSED = true;
+bool g_MODE_SIN = false;
+bool g_MODE_COS = false;
+bool g_MODE_TAN = false;
 
 void render(void);
 
 void reshape(int, int);
 
-void onKeyboardPress(unsigned char characterPressed, int x, int y);
+void timer(int);
 
-void onMouseEvent(int button, int state, int x, int y);
+void onKeyboardPress(unsigned char characterPressed, __attribute__((unused)) int x, __attribute__((unused)) int y);
 
-void drawAxes();
-
-void drawButtons();
+void onMouseEvent(int button, __attribute__((unused)) int state, int x, int y);
 
 int main(int argc, char **argv) {
     glutInit(&argc, argv);
@@ -31,6 +34,8 @@ int main(int argc, char **argv) {
     glutDisplayFunc(render);
     // specify viewport, called whenever the window is created, or whenever the window is resized
     glutReshapeFunc(reshape);
+    // set a timer function to keep refreshing display
+    glutTimerFunc(1000, timer, 0);
 
     // set keyboard event function
     glutKeyboardFunc(onKeyboardPress);
@@ -83,62 +88,20 @@ void reshape(int windowWidth, int windowHeight) {
     glMatrixMode(GL_MODELVIEW);
 }
 
+void timer(int) {
+    // ask OpenGL to call the display function again
+    glutPostRedisplay();
+    // 60 frames per second
+    glutTimerFunc(1000 / 60, timer, 0);
+}
+
 // x and y are mouse cursor position when key was pressed
-void onKeyboardPress(unsigned char characterPressed, int x, int y) {
+void onKeyboardPress(unsigned char characterPressed, __attribute__((unused)) int x, __attribute__((unused)) int y) {
     if (characterPressed == 'q')
         exit(0);
 }
 
-void onMouseEvent(int button, int state, int x, int y) {
+void onMouseEvent(int button, __attribute__((unused)) int state, int x, int y) {
     if (button == GLUT_RIGHT_BUTTON)
         exit(0);
-}
-
-void drawAxes() {
-    glBegin(GL_LINES);
-    // X-AXIS
-    glVertex2f(spaceBetween_XAxis_ScreenEdge, xAxis_YCoordinate);
-    glVertex2f(xAxis_length + spaceBetween_XAxis_ScreenEdge, xAxis_YCoordinate);
-    // draw > at the end of X-axis
-    // bottom line
-    glVertex2f(xAxis_length + spaceBetween_XAxis_ScreenEdge, xAxis_YCoordinate + 20);
-    glVertex2f(xAxis_length + spaceBetween_XAxis_ScreenEdge + 20, xAxis_YCoordinate);
-    // top line
-    glVertex2f(xAxis_length + spaceBetween_XAxis_ScreenEdge, xAxis_YCoordinate - 20);
-    glVertex2f(xAxis_length + spaceBetween_XAxis_ScreenEdge + 20, xAxis_YCoordinate);
-
-    // Y-AXIS
-    glVertex2f(yAxis_XCoordinate, spaceBetween_YAxis_BottomEdge);
-    glVertex2f(yAxis_XCoordinate, SCREEN_HEIGHT - spaceBetween_YAxis_TopEdge);
-    // draw ^ at the top of Y-axis
-    // left line
-    glVertex2f(yAxis_XCoordinate - 20, SCREEN_HEIGHT - spaceBetween_YAxis_TopEdge);
-    glVertex2f(yAxis_XCoordinate, SCREEN_HEIGHT - spaceBetween_YAxis_TopEdge + 20);
-    // right line
-    glVertex2f(yAxis_XCoordinate + 20, SCREEN_HEIGHT - spaceBetween_YAxis_TopEdge);
-    glVertex2f(yAxis_XCoordinate, SCREEN_HEIGHT - spaceBetween_YAxis_TopEdge + 20);
-    glEnd();
-}
-
-void drawButtons() {
-    float numberOfButtonsDrawn{};
-    float maxNumberOfButtons = 4;
-    for (int i = 0; i < (int) maxNumberOfButtons; i++) {
-        float leftX = spaceBetween_Buttons_LeftEdge + numberOfButtonsDrawn * buttonWidth +
-                      numberOfButtonsDrawn * spaceBetween_Buttons;
-        float rightX = leftX + buttonWidth;
-        float topY = SCREEN_HEIGHT - spaceBetween_Buttons_TopBottom;
-        float bottomY = topY - buttonHeight;
-
-        glBegin(GL_POLYGON);
-        // draw polygons counter clock wise to make sure you draw the front face
-        // so top left, bottom left, bottom right, top right
-        glVertex2f(leftX, topY);
-        glVertex2f(leftX, bottomY);
-        glVertex2f(rightX, bottomY);
-        glVertex2f(rightX, topY);
-        glEnd();
-
-        numberOfButtonsDrawn++;
-    }
 }

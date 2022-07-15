@@ -3,7 +3,7 @@ project(TrigonometricFunctions)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(TrigonometricFunctions main.cpp constants.h)
+add_executable(TrigonometricFunctions main.cpp constants.h functions.h)
 
 set(OpenGlLinkers -lglut -lGLU -lGL)
 target_link_libraries(TrigonometricFunctions ${OpenGlLinkers})
