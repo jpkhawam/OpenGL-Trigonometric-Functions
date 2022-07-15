@@ -15,6 +15,7 @@ extern bool g_MODE_TAN;
 extern bool g_MODE_ASIN;
 extern bool g_MODE_ACOS;
 extern bool g_MODE_ATAN;
+extern float g_offset;
 
 enum equations {
     sine = 0,
@@ -47,6 +48,7 @@ void pauseAll() {
     g_MODE_ASIN = false;
     g_MODE_ACOS = false;
     g_MODE_ATAN = false;
+    g_offset = 0;
 }
 
 void drawString(float x, float y, std::string string, RGB rgb) {
@@ -206,10 +208,16 @@ void drawButtons() {
 
 void drawSin(float offset) {
     int numberOfPoints{};
-    for (float i = -4; numberOfPoints < 200; i = i + 0.01) {
+    int pointsToDraw = 300 - offset * 4;
+    if (offset < 1)
+        pointsToDraw = 250;
+    if (offset < 0.5)
+        pointsToDraw = 200;
+    for (float i = -5; numberOfPoints < pointsToDraw; i = i + 0.01) {
         glBegin(GL_POINTS);
         glColor3f(1, 0, 0);
-        glVertex2f(i + offset, std::sin(i + offset));
+        if (i + offset < 4 && i + offset > -4)
+            glVertex2f(i + offset, std::sin(i + offset));
         glEnd();
         numberOfPoints++;
     }
@@ -217,10 +225,16 @@ void drawSin(float offset) {
 
 void drawCos(float offset) {
     int numberOfPoints{};
-    for (float i = -4; numberOfPoints < 200; i = i + 0.01) {
+    int pointsToDraw = 300 - offset * 4;
+    if (offset < 1)
+        pointsToDraw = 250;
+    if (offset < 0.5)
+        pointsToDraw = 200;
+    for (float i = -5; numberOfPoints < pointsToDraw; i = i + 0.01) {
         glBegin(GL_POINTS);
         glColor3f(0, 1, 0);
-        glVertex2f(i + offset, std::cos(i + offset));
+        if (i + offset < 4 && i + offset > -4)
+            glVertex2f(i + offset, std::cos(i + offset));
         glEnd();
         numberOfPoints++;
     }
@@ -228,7 +242,12 @@ void drawCos(float offset) {
 
 void drawTan(float offset) {
     int numberOfPoints{};
-    for (float i = -4; numberOfPoints < 200; i = i + 0.01) {
+    int pointsToDraw = 300 - offset * 4;
+    if (offset < 1)
+        pointsToDraw = 250;
+    if (offset < 0.5)
+        pointsToDraw = 200;
+    for (float i = -5; numberOfPoints < pointsToDraw; i = i + 0.01) {
         glBegin(GL_POINTS);
         glColor3f(0, 0, 1);
         if (std::tan(i + offset) < 1.15 && std::tan(i + offset) > -1.35)
@@ -240,7 +259,12 @@ void drawTan(float offset) {
 
 void drawAsin(float offset) {
     int numberOfPoints{};
-    for (float i = -4; numberOfPoints < 200; i = i + 0.01) {
+    int pointsToDraw = 300 - offset * 4;
+    if (offset < 1)
+        pointsToDraw = 250;
+    if (offset < 0.5)
+        pointsToDraw = 200;
+    for (float i = -5; numberOfPoints < pointsToDraw; i = i + 0.01) {
         glBegin(GL_POINTS);
         glColor3f(1, 1, 0);
         if (std::asin(i + offset) < 1.15 && std::asin(i + offset) > -1.35)
@@ -252,7 +276,12 @@ void drawAsin(float offset) {
 
 void drawAcos(float offset) {
     int numberOfPoints{};
-    for (float i = -4; numberOfPoints < 200; i = i + 0.01) {
+    int pointsToDraw = 300 - offset * 4;
+    if (offset < 1)
+        pointsToDraw = 250;
+    if (offset < 0.5)
+        pointsToDraw = 200;
+    for (float i = -5; numberOfPoints < pointsToDraw; i = i + 0.01) {
         glBegin(GL_POINTS);
         glColor3f(1, 0, 1);
         if (std::acos(i + offset) < 1.15 && std::acos(i + offset) > -1.35)
@@ -264,7 +293,12 @@ void drawAcos(float offset) {
 
 void drawAtan(float offset) {
     int numberOfPoints{};
-    for (float i = -4; numberOfPoints < 200; i = i + 0.01) {
+    int pointsToDraw = 300 - offset * 4;
+    if (offset < 1)
+        pointsToDraw = 250;
+    if (offset < 0.5)
+        pointsToDraw = 200;
+    for (float i = -5; numberOfPoints < pointsToDraw; i = i + 0.01) {
         glBegin(GL_POINTS);
         glColor3f(0, 1, 1);
         if (std::atan(i + offset) < 1.15 && std::atan(i + offset) > -1.35)

@@ -70,7 +70,7 @@ void render(void) {
     if (g_MODE_ATAN)
         drawAtan(g_offset);
 
-    if (g_offset < 6)
+    if (g_offset < 8)
         g_offset += 0.1;
     else
         g_offset = 0;
