@@ -1,10 +1,16 @@
 #include <GL/glut.h>
 #include "functions.h"
 
-bool g_PAUSED = true;
-bool g_MODE_SIN = false;
+constexpr int SCREEN_WIDTH = 1920;
+constexpr int SCREEN_HEIGHT = 1080;
+
+bool g_MODE_SIN = true;
 bool g_MODE_COS = false;
 bool g_MODE_TAN = false;
+bool g_MODE_ASIN = false;
+bool g_MODE_ACOS = false;
+bool g_MODE_ATAN = false;
+float g_offset = 0;
 
 void render(void);
 
@@ -23,19 +29,20 @@ int main(int argc, char **argv) {
     // when we want to display the back buffer, we can just swap the two via glutSwapBuffers()
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowPosition(0, 0);
-    // you can modify these values in "constants.h" to match your screen resolution
+    // you can modify these values to match your screen resolution
     glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
     glutCreateWindow("Trigonometric Functions");
 
     // set the default background color (when color buffer is cleared)
     glClearColor(0.2, 0.2, 0.2, 0.2);
+    glPointSize(3);
 
     // set display function, called when the window is created
     glutDisplayFunc(render);
     // specify viewport, called whenever the window is created, or whenever the window is resized
     glutReshapeFunc(reshape);
     // set a timer function to keep refreshing display
-    glutTimerFunc(1000, timer, 0);
+    glutTimerFunc(200, timer, 0);
 
     // set keyboard event function
     glutKeyboardFunc(onKeyboardPress);
@@ -54,7 +61,24 @@ void render(void) {
 
     drawAxes();
     drawButtons();
-    // then by if statements, call to either of 3 functions depending on which animation is active
+
+    if (g_MODE_SIN)
+        drawSin(g_offset);
+    if (g_MODE_COS)
+        drawCos(g_offset);
+    if (g_MODE_TAN)
+        drawTan(g_offset);
+    if (g_MODE_ASIN)
+        drawAsin(g_offset);
+    if (g_MODE_ACOS)
+        drawAcos(g_offset);
+    if (g_MODE_ATAN)
+        drawAtan(g_offset);
+
+    if (g_offset < 6)
+        g_offset += 0.1;
+    else
+        g_offset = 0;
 
     // swap the back buffer with the front buffer to display what we just drew
     glutSwapBuffers();
@@ -83,7 +107,7 @@ void reshape(int windowWidth, int windowHeight) {
     // |     |      |
     // --------------
     // farthest left,    right,      bottom,     top
-    gluOrtho2D(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT);
+    gluOrtho2D(-5, 5, -1.5, 1.5);
     // we are done modifying the projection matrix, go back to model view matrix
     glMatrixMode(GL_MODELVIEW);
 }
@@ -97,11 +121,26 @@ void timer(int) {
 
 // x and y are mouse cursor position when key was pressed
 void onKeyboardPress(unsigned char characterPressed, __attribute__((unused)) int x, __attribute__((unused)) int y) {
-    if (characterPressed == 'q')
+    if (characterPressed == 'q' | characterPressed == 'Q') {
         exit(0);
+    } else if (characterPressed == 's' | characterPressed == 'S') {
+        g_MODE_SIN = !g_MODE_SIN;
+    } else if (characterPressed == 'c' | characterPressed == 'C') {
+        g_MODE_COS = !g_MODE_COS;
+    } else if (characterPressed == 't' | characterPressed == 'T') {
+        g_MODE_TAN = !g_MODE_TAN;
+    } else if (characterPressed == 'p' | characterPressed == 'P') {
+        g_MODE_SIN = false;
+        g_MODE_COS = false;
+        g_MODE_TAN = false;
+        g_MODE_ASIN = false;
+        g_MODE_ACOS = false;
+        g_MODE_ATAN = false;
+    }
 }
 
 void onMouseEvent(int button, __attribute__((unused)) int state, int x, int y) {
-    if (button == GLUT_RIGHT_BUTTON)
+    if (button == GLUT_RIGHT_BUTTON) {
         exit(0);
+    }
 }
