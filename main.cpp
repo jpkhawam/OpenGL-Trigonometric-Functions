@@ -4,7 +4,7 @@
 constexpr int SCREEN_WIDTH = 1920;
 constexpr int SCREEN_HEIGHT = 1080;
 
-bool g_MODE_SIN = true;
+bool g_MODE_SIN = false;
 bool g_MODE_COS = false;
 bool g_MODE_TAN = false;
 bool g_MODE_ASIN = false;
@@ -129,6 +129,12 @@ void onKeyboardPress(unsigned char characterPressed, __attribute__((unused)) int
         g_MODE_COS = !g_MODE_COS;
     } else if (characterPressed == 't' | characterPressed == 'T') {
         g_MODE_TAN = !g_MODE_TAN;
+    } else if (characterPressed == 'i' | characterPressed == 'T') {
+        g_MODE_ASIN = !g_MODE_ASIN;
+    } else if (characterPressed == 'o' | characterPressed == 'T') {
+        g_MODE_ACOS = !g_MODE_ACOS;
+    } else if (characterPressed == 'a' | characterPressed == 'T') {
+        g_MODE_ATAN = !g_MODE_ATAN;
     } else if (characterPressed == 'p' | characterPressed == 'P') {
         g_MODE_SIN = false;
         g_MODE_COS = false;

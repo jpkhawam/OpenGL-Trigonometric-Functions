@@ -16,6 +16,38 @@ extern bool g_MODE_ASIN;
 extern bool g_MODE_ACOS;
 extern bool g_MODE_ATAN;
 
+enum equations {
+    sine = 0,
+    cosine = 1,
+    tangent = 2,
+    pause = 3,
+    arcSine = 4,
+    arcCosine = 5,
+    arcTangent = 6
+};
+
+struct RGB {
+    float red, green, blue;
+
+    RGB(float red, float green, float blue) {
+        this->red = red;
+        this->green = green;
+        this->blue = blue;
+    }
+};
+
+bool allPaused() {
+    return g_MODE_SIN || g_MODE_COS || g_MODE_TAN || g_MODE_ASIN || g_MODE_ACOS || g_MODE_ATAN;
+}
+
+void drawString(float x, float y, std::string string, RGB rgb) {
+    glColor3f(rgb.red, rgb.green, rgb.blue);
+    glRasterPos2f(x, y);
+    for (int i = 0; i < string.size(); i++) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, string.at(i));
+    }
+}
+
 void drawAxes() {
     glLineWidth(2);
     glColor3f(1, 1, 1);
@@ -47,18 +79,76 @@ void drawAxes() {
 void drawButtons() {
     float numberOfButtonsDrawn{};
     float maxNumberOfButtons = 7;
+
     float buttonWidth = 0.85;
     float spacing = 0.15;
+
     glColor3f(1, 1, 1);
     for (int i = 0; i < (int) maxNumberOfButtons; i++) {
+        float margin = numberOfButtonsDrawn * (buttonWidth + spacing);
+
+        if (i == equations::sine && g_MODE_SIN) {
+            glColor3f(1, 0, 0);
+        } else if (i == equations::sine && !g_MODE_SIN) {
+            glColor3f(0.3, 0.3, 0.3);
+        } else if (i == equations::cosine && g_MODE_COS) {
+            glColor3f(0, 1, 0);
+        } else if (i == equations::cosine && !g_MODE_COS) {
+            glColor3f(0.3, 0.3, 0.3);
+        } else if (i == equations::tangent && g_MODE_TAN) {
+            glColor3f(0, 0, 1);
+        } else if (i == equations::tangent && !g_MODE_TAN) {
+            glColor3f(0.3, 0.3, 0.3);
+        } else if (i == equations::pause && !allPaused()) {
+            glColor3f(0, 0, 0);
+        } else if (i == equations::pause && allPaused()) {
+            glColor3f(0.3, 0.3, 0.3);
+        } else if (i == equations::arcSine && g_MODE_ASIN) {
+            glColor3f(1, 1, 0);
+        } else if (i == equations::arcSine && !g_MODE_ASIN) {
+            glColor3f(0.3, 0.3, 0.3);
+        } else if (i == equations::arcCosine && g_MODE_ACOS) {
+            glColor3f(1, 0, 1);
+        } else if (i == equations::arcCosine && !g_MODE_ACOS) {
+            glColor3f(0.3, 0.3, 0.3);
+        } else if (i == equations::arcTangent && g_MODE_ATAN) {
+            glColor3f(0, 1, 1);
+        } else if (i == equations::arcTangent && !g_MODE_ATAN) {
+            glColor3f(0.3, 0.3, 0.3);
+        }
+
         glBegin(GL_POLYGON);
         // draw polygons counter clock wise to make sure you draw the front face
         // so top left, bottom left, bottom right, top right
-        glVertex2f(-3.4 + numberOfButtonsDrawn * (buttonWidth + spacing), 1.4);
-        glVertex2f(-3.4 + numberOfButtonsDrawn * (buttonWidth + spacing), 1.25);
-        glVertex2f(-2.6 + numberOfButtonsDrawn * (buttonWidth + spacing), 1.25);
-        glVertex2f(-2.6 + numberOfButtonsDrawn * (buttonWidth + spacing), 1.4);
+        glVertex2f(-3.4 + margin, 1.4);
+        glVertex2f(-3.4 + margin, 1.25);
+        glVertex2f(-2.6 + margin, 1.25);
+        glVertex2f(-2.6 + margin, 1.4);
         glEnd();
+
+        if (i == equations::sine) {
+            drawString(-3.23 + margin, 1.3, "sine (s)", RGB(1, 1, 1));
+        } else if (i == equations::cosine && g_MODE_COS) {
+            drawString(-3.278 + margin, 1.3, "cosine (c)", RGB(0, 0, 0));
+        } else if (i == equations::cosine && !g_MODE_COS) {
+            drawString(-3.278 + margin, 1.3, "cosine (c)", RGB(1, 1, 1));
+        } else if (i == equations::tangent) {
+            drawString(-3.33 + margin, 1.3, "tangent (t)", RGB(1, 1, 1));
+        } else if (i == equations::pause) {
+            drawString(-3.27 + margin, 1.3, "pause (p)", RGB(1, 1, 1));
+        } else if (i == equations::arcSine && g_MODE_ASIN) {
+            drawString(-3.33 + margin, 1.3, "arc sine (i)", RGB(0, 0, 0));
+        } else if (i == equations::arcSine && !g_MODE_ASIN) {
+            drawString(-3.33 + margin, 1.3, "arc sine (i)", RGB(1, 1, 1));
+        } else if (i == equations::arcCosine && g_MODE_ACOS) {
+            drawString(-3.33 + margin, 1.3, "arc cos (o)", RGB(0, 0, 0));
+        } else if (i == equations::arcCosine && !g_MODE_ACOS) {
+            drawString(-3.33 + margin, 1.3, "arc cos (o)", RGB(1, 1, 1));
+        } else if (i == equations::arcTangent && g_MODE_ATAN) {
+            drawString(-3.33 + margin, 1.3, "arc tan (a)", RGB(0, 0, 0));
+        } else if (i == equations::arcTangent && !g_MODE_ATAN) {
+            drawString(-3.33 + margin, 1.3, "arc tan (a)", RGB(1, 1, 1));
+        }
 
         numberOfButtonsDrawn++;
     }
@@ -103,7 +193,8 @@ void drawAsin(float offset) {
     for (float i = -4; numberOfPoints < 200; i = i + 0.01) {
         glBegin(GL_POINTS);
         glColor3f(1, 1, 0);
-        glVertex2f(i + offset, std::asin(i + offset));
+        if (std::asin(i + offset) < 1.15 && std::asin(i + offset) > -1.35)
+            glVertex2f(i + offset, std::asin(i + offset));
         glEnd();
         numberOfPoints++;
     }
@@ -114,7 +205,8 @@ void drawAcos(float offset) {
     for (float i = -4; numberOfPoints < 200; i = i + 0.01) {
         glBegin(GL_POINTS);
         glColor3f(1, 0, 1);
-        glVertex2f(i + offset, std::acos(i + offset));
+        if (std::acos(i + offset) < 1.15 && std::acos(i + offset) > -1.35)
+            glVertex2f(i + offset, std::acos(i + offset));
         glEnd();
         numberOfPoints++;
     }
@@ -125,16 +217,10 @@ void drawAtan(float offset) {
     for (float i = -4; numberOfPoints < 200; i = i + 0.01) {
         glBegin(GL_POINTS);
         glColor3f(0, 1, 1);
-        glVertex2f(i + offset, std::atan(i + offset));
+        if (std::atan(i + offset) < 1.15 && std::atan(i + offset) > -1.35)
+            glVertex2f(i + offset, std::atan(i + offset));
         glEnd();
         numberOfPoints++;
-    }
-}
-
-void drawString(float x, float y, std::string string) {
-    glRasterPos2f(x, y);
-    for (int i = 0; i < string.size(); i++) {
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, string.at(i));
     }
 }
 
