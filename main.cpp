@@ -11,6 +11,8 @@ void onMouseEvent(int button, int state, int x, int y);
 
 void drawAxes();
 
+void drawButtons();
+
 int main(int argc, char **argv) {
     glutInit(&argc, argv);
     // GLUT_DOUBLE means double buffer
@@ -18,7 +20,7 @@ int main(int argc, char **argv) {
     // when we want to display the back buffer, we can just swap the two via glutSwapBuffers()
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowPosition(0, 0);
-    // if your screen isn't this resolution you should modify these
+    // you can modify these values in "constants.h" to match your screen resolution
     glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
     glutCreateWindow("Trigonometric Functions");
 
@@ -46,6 +48,7 @@ void render(void) {
     glLoadIdentity();
 
     drawAxes();
+    drawButtons();
     // then by if statements, call to either of 3 functions depending on which animation is active
 
     // swap the back buffer with the front buffer to display what we just drew
@@ -115,4 +118,27 @@ void drawAxes() {
     glVertex2f(yAxis_XCoordinate + 20, SCREEN_HEIGHT - spaceBetween_YAxis_TopEdge);
     glVertex2f(yAxis_XCoordinate, SCREEN_HEIGHT - spaceBetween_YAxis_TopEdge + 20);
     glEnd();
+}
+
+void drawButtons() {
+    float numberOfButtonsDrawn{};
+    float maxNumberOfButtons = 4;
+    for (int i = 0; i < (int) maxNumberOfButtons; i++) {
+        float leftX = spaceBetween_Buttons_LeftEdge + numberOfButtonsDrawn * buttonWidth +
+                      numberOfButtonsDrawn * spaceBetween_Buttons;
+        float rightX = leftX + buttonWidth;
+        float topY = SCREEN_HEIGHT - spaceBetween_Buttons_TopBottom;
+        float bottomY = topY - buttonHeight;
+
+        glBegin(GL_POLYGON);
+        // draw polygons counter clock wise to make sure you draw the front face
+        // so top left, bottom left, bottom right, top right
+        glVertex2f(leftX, topY);
+        glVertex2f(leftX, bottomY);
+        glVertex2f(rightX, bottomY);
+        glVertex2f(rightX, topY);
+        glEnd();
+
+        numberOfButtonsDrawn++;
+    }
 }
