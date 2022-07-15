@@ -8,11 +8,11 @@
 constexpr int SCREEN_WIDTH = 1920;
 constexpr int SCREEN_HEIGHT = 1080;
 
-constexpr int buttonHeight = 260;
-constexpr int buttonWidth = 390;
-constexpr int spaceBetween_Buttons = 50;
-constexpr int spaceBetween_Buttons_SideEdge = 105;
-constexpr int spaceBetween_Buttons_TopBottom = 20;
+constexpr float buttonHeight = 150;
+constexpr float buttonWidth = 300;
+constexpr float spaceBetween_Buttons = 50;
+constexpr float spaceBetween_Buttons_LeftEdge = 305;
+constexpr float spaceBetween_Buttons_TopBottom = 20;
 
 constexpr int spaceBetween_XAxis_ScreenEdge = 100;
 constexpr int spaceBetween_YAxis_BottomEdge = 100;
