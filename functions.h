@@ -40,6 +40,15 @@ bool allPaused() {
     return g_MODE_SIN || g_MODE_COS || g_MODE_TAN || g_MODE_ASIN || g_MODE_ACOS || g_MODE_ATAN;
 }
 
+void pauseAll() {
+    g_MODE_SIN = false;
+    g_MODE_COS = false;
+    g_MODE_TAN = false;
+    g_MODE_ASIN = false;
+    g_MODE_ACOS = false;
+    g_MODE_ATAN = false;
+}
+
 void drawString(float x, float y, std::string string, RGB rgb) {
     glColor3f(rgb.red, rgb.green, rgb.blue);
     glRasterPos2f(x, y);
@@ -74,6 +83,47 @@ void drawAxes() {
     glVertex2f(0 + 0.2, 1);
     glVertex2f(0, 1 + 0.15);
     glEnd();
+
+    // draw ---|---|---|--- marks on the x axis
+    for (int i = -4; i < 4; i++) {
+        if (i == 0)
+            continue;
+        drawString(i, 0.05, std::to_string(i), RGB(1, 1, 1));
+        glBegin(GL_LINES);
+        glVertex2f(i, -0.04);
+        glVertex2f(i, 0.04);
+        glEnd();
+    }
+    for (float i = -4; i < 4; i = i + 0.2) {
+        glBegin(GL_LINES);
+        glVertex2f(i, -0.02);
+        glVertex2f(i, 0.02);
+        glEnd();
+    }
+    // 4 and 0 need to be written a little away, so they don't coincide with the axes
+    drawString(3.9, 0.05, "4", RGB(1, 1, 1));
+
+
+    // draw marks on the y axis
+    for (float i = -1; i <= 1; i = i + 0.1) {
+        glBegin(GL_LINES);
+        glVertex2f(-0.05, i);
+        glVertex2f(0.05, i);
+        glEnd();
+    }
+    for (float i = -1; i <= 1; i = i + 0.5) {
+        std::string value;
+        if (i == 0)
+            // already drawn for x
+            continue;
+        if (i < 0)
+            // account for -
+            value = std::to_string(i).substr(0, 4);
+        if (i > 0)
+            value = std::to_string(i).substr(0, 3);
+        drawString(0.06, i, value, RGB(1, 1, 1));
+    }
+
 }
 
 void drawButtons() {

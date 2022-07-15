@@ -20,8 +20,6 @@ void timer(int);
 
 void onKeyboardPress(unsigned char characterPressed, __attribute__((unused)) int x, __attribute__((unused)) int y);
 
-void onMouseEvent(int button, __attribute__((unused)) int state, int x, int y);
-
 int main(int argc, char **argv) {
     glutInit(&argc, argv);
     // GLUT_DOUBLE means double buffer
@@ -43,11 +41,8 @@ int main(int argc, char **argv) {
     glutReshapeFunc(reshape);
     // set a timer function to keep refreshing display
     glutTimerFunc(200, timer, 0);
-
     // set keyboard event function
     glutKeyboardFunc(onKeyboardPress);
-    // set mouse event function
-    glutMouseFunc(onMouseEvent);
 
     // tells OpenGL the initialization process is over and tells it to start rendering
     glutMainLoop();
@@ -136,17 +131,6 @@ void onKeyboardPress(unsigned char characterPressed, __attribute__((unused)) int
     } else if (characterPressed == 'a' | characterPressed == 'T') {
         g_MODE_ATAN = !g_MODE_ATAN;
     } else if (characterPressed == 'p' | characterPressed == 'P') {
-        g_MODE_SIN = false;
-        g_MODE_COS = false;
-        g_MODE_TAN = false;
-        g_MODE_ASIN = false;
-        g_MODE_ACOS = false;
-        g_MODE_ATAN = false;
-    }
-}
-
-void onMouseEvent(int button, __attribute__((unused)) int state, int x, int y) {
-    if (button == GLUT_RIGHT_BUTTON) {
-        exit(0);
+        pauseAll();
     }
 }
