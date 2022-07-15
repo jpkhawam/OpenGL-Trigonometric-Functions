@@ -1,4 +1,5 @@
 #include <GL/glut.h>
+#include "constants.h"
 
 void render(void);
 
@@ -18,7 +19,7 @@ int main(int argc, char **argv) {
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowPosition(0, 0);
     // if your screen isn't this resolution you should modify these
-    glutInitWindowSize(1920, 1080);
+    glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
     glutCreateWindow("Trigonometric Functions");
 
     // set the default background color (when color buffer is cleared)
@@ -74,7 +75,7 @@ void reshape(int windowWidth, int windowHeight) {
     // |     |      |
     // --------------
     // farthest left,    right,      bottom,     top
-    gluOrtho2D(0, 1920, 0, 1080);
+    gluOrtho2D(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT);
     // we are done modifying the projection matrix, go back to model view matrix
     glMatrixMode(GL_MODELVIEW);
 }
@@ -92,25 +93,26 @@ void onMouseEvent(int button, int state, int x, int y) {
 
 void drawAxes() {
     glBegin(GL_LINES);
-        // X-AXIS
-        glVertex2f(100, 440);
-        glVertex2f(1820, 440);
-            // draw > at the end of X-axis
-            // bottom line
-            glVertex2f(1820, 460);
-            glVertex2f(1840, 440);
-            // top line
-            glVertex2f(1820, 420);
-            glVertex2f(1840, 440);
-        // Y-AXIS
-        glVertex2f(960, 100);
-        glVertex2f(960, 780);
-            // draw ^ at the top of Y-axis
-            // left line
-            glVertex2f(940, 780);
-            glVertex2f(960, 800);
-            // right line
-            glVertex2f(980, 780);
-            glVertex2f(960, 800);
+    // X-AXIS
+    glVertex2f(spaceBetween_XAxis_ScreenEdge, xAxis_YCoordinate);
+    glVertex2f(xAxis_length + spaceBetween_XAxis_ScreenEdge, xAxis_YCoordinate);
+    // draw > at the end of X-axis
+    // bottom line
+    glVertex2f(xAxis_length + spaceBetween_XAxis_ScreenEdge, xAxis_YCoordinate + 20);
+    glVertex2f(xAxis_length + spaceBetween_XAxis_ScreenEdge + 20, xAxis_YCoordinate);
+    // top line
+    glVertex2f(xAxis_length + spaceBetween_XAxis_ScreenEdge, xAxis_YCoordinate - 20);
+    glVertex2f(xAxis_length + spaceBetween_XAxis_ScreenEdge + 20, xAxis_YCoordinate);
+
+    // Y-AXIS
+    glVertex2f(yAxis_XCoordinate, spaceBetween_YAxis_BottomEdge);
+    glVertex2f(yAxis_XCoordinate, SCREEN_HEIGHT - spaceBetween_YAxis_TopEdge);
+    // draw ^ at the top of Y-axis
+    // left line
+    glVertex2f(yAxis_XCoordinate - 20, SCREEN_HEIGHT - spaceBetween_YAxis_TopEdge);
+    glVertex2f(yAxis_XCoordinate, SCREEN_HEIGHT - spaceBetween_YAxis_TopEdge + 20);
+    // right line
+    glVertex2f(yAxis_XCoordinate + 20, SCREEN_HEIGHT - spaceBetween_YAxis_TopEdge);
+    glVertex2f(yAxis_XCoordinate, SCREEN_HEIGHT - spaceBetween_YAxis_TopEdge + 20);
     glEnd();
 }
